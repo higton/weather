@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>home</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="home">
+  <ion-grid *ngIf="weather">
+    <ion-row>
+      <ion-col wdth-50 offset-25>
+        <h2 class="longitude_latitude">
+          {{weather.latitude}}, {{weather.longitude}}
+        </h2>
+        <div class="icon">
+          <img src= {{getImageUrl()}} >
+        </div>
+        <h4 class="hourly_summary">
+          {{weather.hourly.summary}}
+        </h4>
+        <h1 class="temperature">
+          {{weather.currently.temperature}}&deg;
+        </h1>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col width-100>
+        <ion-list>
+
+          <ion-item>
+            <strong>Apparent Temperature: </strong> {{weather.currently.apparentTemperature}}
+          </ion-item>
+          <ion-item>
+            <strong>UV: </strong> {{weather.currently.uvIndex}}
+          </ion-item>
+          <ion-item>
+            <strong>Relative Humidity: </strong> {{weather.currently.humidity}}
+          </ion-item>
+          <ion-item>
+            <strong>Visbilibity: </strong> {{weather.currently.visibility}}
+          </ion-item>
+
+
+        </ion-list>
+      </ion-col>
+    </ion-row>

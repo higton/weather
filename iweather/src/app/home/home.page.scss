@@ -1,0 +1,39 @@
+/* .home{
+    --background: var(--ion-color-secondary);
+    margin-top: 30px;
+} */
+ion-toolbar{
+    --background: var(--ion-color-primary);
+}
+
+ion-title{
+    --color: var(--ion-color-light);
+    text-align: center;
+}
+
+ion-item{
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-light);
+}
+
+strong{
+    margin-right: 10px;
+}
+
+.icon{
+    text-align: center;
+}
+
+.temperature{
+    font-size: 90px;
+    text-align: center;
+    font-weight: normal;
+}
+
+.hourly_summary{
+    text-align: center;
+}
+
+.longitude_latitude{
+    text-align: center;
+}
