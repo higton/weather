@@ -3,6 +3,7 @@ import { map } from 'rxjs/operators';
 import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http";
 import { from, Observable } from 'rxjs';
 import {  Response, Headers, RequestOptions } from "@angular/http";
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +20,10 @@ export class WeatherService {
   url:string;
   city = 'rome';
 
+  $subject = new Subject<number>();
+
   constructor(private http: HttpClient) {
     console.log("Hello WeaherProvider Provider");
-    
   }
 
   getWeather(latitude: string, longitude: string){
@@ -39,5 +41,10 @@ export class WeatherService {
     const url = `https://api.darksky.net/forecast/ef24cb03bebdd3e3c5c7813020d6d16d/${latitude},${longitude}?units=si`;
 
     return this.http.jsonp(url, "callback");
+  }
+
+
+  publishEventToHomePage(){
+    this.$subject.next(1);
   }
 }

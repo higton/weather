@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { WeatherService } from 'src/services/weather.service';
-import { subscribeOn } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
 
 @Component({
@@ -16,9 +15,22 @@ export class HomePage implements OnInit {
   }
 
   constructor(
+    private ngZone: NgZone,
     private weatherService:WeatherService,
     private storage:Storage)
-    { }
+    { 
+      this.weatherService.$subject.subscribe(data => {
+        if(data == 1){
+          this.ngOnInit()
+          console.log('foi')
+          this.storage.get('location').then((val) => {
+            if(val != null){
+              console.log(JSON.parse(val));
+            }
+          });
+        } 
+      })
+    }
 
   ngOnInit() {
     this.storage.get('location').then((val) => {
@@ -30,10 +42,20 @@ export class HomePage implements OnInit {
           longitude: '-47.921822'
         }
       }
-      this.weatherService.getWeather(this.location.latitude, this.location.longitude).subscribe(data =>
-           {this.weather = data; console.log(data);});
+      this.getApiData();
     });
+  }
 
+  getApiData(){
+    this.weatherService
+    .getWeather(this.location.latitude, this.location.longitude)
+    .subscribe(
+      (data)=>{
+        this.weather = data;
+        console.log(data);
+      },
+      (error) => console.log(error)
+    );
   }
 
   getImageUrl():string{
