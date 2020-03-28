@@ -9,46 +9,61 @@ import { Storage } from '@ionic/storage';
 })
 export class HomePage implements OnInit {
   weather:any;
-  location:{
-    latitude:string,
-    longitude:string
+  searchedResult:{
+    lat:string,
+    lon:string,
+    address:{
+      country: string,
+      state: string,
+      city: string,
+      station: string,
+    }
   }
 
   constructor(
-    private ngZone: NgZone,
     private weatherService:WeatherService,
     private storage:Storage)
-    { 
-      this.weatherService.$subject.subscribe(data => {
-        if(data == 1){
-          this.ngOnInit()
-          console.log('foi')
-          this.storage.get('location').then((val) => {
-            if(val != null){
-              console.log(JSON.parse(val));
-            }
-          });
-        } 
-      })
-    }
+    { }
 
   ngOnInit() {
-    this.storage.get('location').then((val) => {
+    this.checkForEvent();
+
+    this.getLocationValueAndMakeRequest()
+  }
+  
+  checkForEvent(){
+    this.weatherService.$subject.subscribe(data => {
+      if(data == 1){
+        this.ngOnInit()
+      } 
+    })
+  }
+
+  getLocationValueAndMakeRequest(){
+    this.storage.get('searchedResult').then((val) => {
+      console.log(JSON.parse(val))
       if(val != null){
-        this.location = JSON.parse(val);
+        this.searchedResult = JSON.parse(val);
       } else {
-        this.location = {
-          latitude: '-15.826691',
-          longitude: '-47.921822'
+        console.log("akii")
+        this.searchedResult = {
+          lat: '-15.826691',
+          lon: '-47.921822',
+          address:{
+            country: 'Brazil',
+            state: 'DF',
+            city: 'Taguatinga',
+            station: ''
+          }
         }
       }
-      this.getApiData();
+      this.getAPIWeatherData();
     });
   }
 
-  getApiData(){
+  getAPIWeatherData(){
     this.weatherService
-    .getWeather(this.location.latitude, this.location.longitude)
+    .getWeather(this.searchedResult.lat, this.searchedResult.lon)
     .subscribe(
       (data)=>{
         this.weather = data;
@@ -60,5 +75,14 @@ export class HomePage implements OnInit {
 
   getImageUrl():string{
     return `../assets/images/${this.weather.currently.icon}.png`
+  }
+  
+  roundNumber(number:number){
+    return Math.round(number)
+  }
+
+  ngOnDestroy(){
+    console.log('destroy')
+    this.weatherService.$subject.unsubscribe();
   }
 }

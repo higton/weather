@@ -10,20 +10,29 @@
       <ion-col width-100>
         <ion-list>
           <form (ngSubmit)="saveForm()">
+
             <ion-item>
               <ion-label fixed>
-                Latitude
+                Country: 
               </ion-label>
-              <ion-input [(ngModel)]="latitude" name="latiitude" type="text">
+              <ion-input [(ngModel)]="searchedCountry" name="locationCountry" type="text">
               </ion-input>
             </ion-item>
             <ion-item>
               <ion-label fixed>
-                Longitude
+                Estate: 
               </ion-label>
-              <ion-input [(ngModel)]="longitude" name="longitude" type="text">
+              <ion-input [(ngModel)]="searchedState" name="locationState" type="text">
               </ion-input>
             </ion-item>
+            <ion-item>
+              <ion-label fixed>
+                City: 
+              </ion-label>
+              <ion-input [(ngModel)]="searchedCity" name="locationCity" type="text">
+              </ion-input>
+            </ion-item>
+
             <ion-button expand="block" (click)="presentAlert()">Save Change</ion-button>
           </form>
         </ion-list>

@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
 import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http";
-import { from, Observable } from 'rxjs';
-import {  Response, Headers, RequestOptions } from "@angular/http";
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -27,22 +24,21 @@ export class WeatherService {
   }
 
   getWeather(latitude: string, longitude: string){
-    // this.city = city
-    // const httpOptions = {
-    //   headers: new HttpHeaders({
-    //     'Content-Type':  'application/json',
-    //     'Authorization': 'my-auth-token'
-    //   })
-    // };
-    // // const params = {
-    // //   access_key: '9fe58942a78e117bb3c875395a608e91',
-    // //   query: city
-    // // }
     const url = `https://api.darksky.net/forecast/ef24cb03bebdd3e3c5c7813020d6d16d/${latitude},${longitude}?units=si`;
 
     return this.http.jsonp(url, "callback");
   }
 
+  getLocation(location: string){
+    const url = "https://nominatim.openstreetmap.org/"
+    let params = new HttpParams()
+    params = params.append('addressdetails', '1')
+    params = params.append('q', location)
+    params = params.append('format', 'json')
+    params = params.append('limit', '1')
+
+    return this.http.get(url, {params: params});
+  }
 
   publishEventToHomePage(){
     this.$subject.next(1);

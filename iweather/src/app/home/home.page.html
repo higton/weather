@@ -8,9 +8,9 @@
   <ion-grid *ngIf="weather">
     <ion-row>
       <ion-col wdth-50 offset-25>
-        <h2 class="longitude_latitude">
-          {{weather.latitude}}, {{weather.longitude}}
-        </h2>
+        <h2>
+        <a *ngIf="searchedResult.address.station">{{searchedResult.address.station}},</a> <a>{{searchedResult.address.city}}, {{searchedResult.address.state}}</a>
+      </h2>
         <div class="icon">
           <img src= {{getImageUrl()}} >
         </div>
@@ -18,7 +18,7 @@
           {{weather.hourly.summary}}
         </h4>
         <h1 class="temperature">
-          {{weather.currently.temperature}}&deg;
+          {{ roundNumber(weather.currently.temperature) }}&deg;
         </h1>
       </ion-col>
     </ion-row>
@@ -28,7 +28,7 @@
         <ion-list>
 
           <ion-item>
-            <strong>Apparent Temperature: </strong> {{weather.currently.apparentTemperature}}
+            <strong>Apparent Temperature: </strong> {{roundNumber(weather.currently.apparentTemperature)}}
           </ion-item>
           <ion-item>
             <strong>UV: </strong> {{weather.currently.uvIndex}}
@@ -37,10 +37,17 @@
             <strong>Relative Humidity: </strong> {{weather.currently.humidity}}
           </ion-item>
           <ion-item>
-            <strong>Visbilibity: </strong> {{weather.currently.visibility}}
+            <strong>Visbilibity: </strong> {{roundNumber(weather.currently.visibility)}}
           </ion-item>
 
 
         </ion-list>
       </ion-col>
     </ion-row>
+
+    <div id="week" class="center">
+      <div class="summary">Rain throughout the week.</div>
+      <div class="day" *ngFor="let day of weather.daily.data">
+        <a>ok</a>
+      </div>
+    </div>
