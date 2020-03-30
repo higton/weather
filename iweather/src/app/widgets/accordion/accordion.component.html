@@ -1,0 +1,30 @@
+<h2 (click)="toggleAccordion()">
+  <div class="container flex">
+    <div class="date__icon">
+      <span class="image-wrapper">
+        <img [src]="image">
+      </span>
+      <span class="name">{{ day }}</span>
+    </div>
+
+    <div class="container-bar" [ngStyle]="applyStyleMargin()">
+      <span>{{roundNumber(dailyMinTemperature)}}&deg;</span>
+      <span class="bar" [ngStyle]="applyStyleWidth()"></span>
+      <span>{{roundNumber(dailyMaxTemperature)}}&deg;</span>
+    </div>
+    <span *ngIf="isMenuOpen">-</span>
+    <span *ngIf="!isMenuOpen">+</span>
+  </div>
+</h2>
+<div [ngClass]="this.isMenuOpen ? 'active' : 'inactive'" id="container">
+  <p>{{ description.summary }}</p>
+  <div class="highLowTemp">
+    <span class="hightTemp">{{roundNumber(dailyMaxTemperature)}}&deg;</span>
+  </div>
+  <ion-button 
+    type="button" 
+    color="primary" 
+    fill="solid" 
+    size="default" 
+    (click)="broadcastName(name)">MORE DETAILS!</ion-button>
+</div>

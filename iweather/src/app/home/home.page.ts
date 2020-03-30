@@ -9,6 +9,7 @@ import { Storage } from '@ionic/storage';
 })
 export class HomePage implements OnInit {
   weather:any;
+  days:any;
   searchedResult:{
     lat:string,
     lon:string,
@@ -22,17 +23,18 @@ export class HomePage implements OnInit {
 
   constructor(
     private weatherService:WeatherService,
-    private storage:Storage)
-    { }
+    private storage:Storage
+    ){ }
 
   ngOnInit() {
     this.checkForEvent();
 
     this.getLocationValueAndMakeRequest()
+
   }
   
   checkForEvent(){
-    this.weatherService.$subject.subscribe(data => {
+    this.weatherService.subject$.subscribe(data => {
       if(data == 1){
         this.ngOnInit()
       } 
@@ -67,22 +69,64 @@ export class HomePage implements OnInit {
     .subscribe(
       (data)=>{
         this.weather = data;
+        this.days = this.convertTimeToDays(this.weather.daily.data);
         console.log(data);
       },
       (error) => console.log(error)
     );
   }
 
-  getImageUrl():string{
-    return `../assets/images/${this.weather.currently.icon}.png`
+  getImageUrl(icon:string):string{
+    return `../assets/images/${icon}.png`
   }
   
   roundNumber(number:number){
     return Math.round(number)
   }
 
+  getMaxTemperatureOfTheWeek(){
+    return this.weather.daily.data.reduce( (maxValue:number, value:any) => {
+     if(maxValue < value.temperatureMax){ 
+        maxValue = value.temperatureMax
+      }
+      return maxValue;
+    }, 0)
+  }
+
+  getMinTemperatureOfTheWeek(){
+    return this.weather.daily.data.reduce( (minValue:number, value:any, index:number) => {
+      if(index === 0){
+        minValue = value.temperatureMin
+      }
+      if(minValue > value.temperatureMin){ 
+         minValue = value.temperatureMin
+       }
+       return minValue;
+     }, {})
+  }
+
+  jsonStringify(tmp:any){
+    return JSON.stringify(tmp)
+  }
+
+  convertTimeToDays(data:any){
+    console.log(data)
+    let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']    
+    return data.map( (element:any, index:number) => {
+      index = index + 1;
+      let date = new Date(element.time * 1000);
+
+      if(index === 1){
+         return 'Today';
+      }
+      else{
+        return days[date.getDay()];
+      }
+    }, 0)
+  }
+
   ngOnDestroy(){
     console.log('destroy')
-    this.weatherService.$subject.unsubscribe();
+    this.weatherService.subject$.unsubscribe();
   }
 }

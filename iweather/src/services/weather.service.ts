@@ -6,18 +6,12 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 
-// const params = {
-//   access_key : '9fe58942a78e117bb3c875395a608e91',
-//   query: 'rome'
-// }
-
-
 export class WeatherService {
   apiKey = "ef24cb03bebdd3e3c5c7813020d6d16d";
   url:string;
   city = 'rome';
 
-  $subject = new Subject<number>();
+  subject$ = new Subject<number>();
 
   constructor(private http: HttpClient) {
     console.log("Hello WeaherProvider Provider");
@@ -41,6 +35,6 @@ export class WeatherService {
   }
 
   publishEventToHomePage(){
-    this.$subject.next(1);
+    this.subject$.next(1);
   }
 }

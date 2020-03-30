@@ -12,8 +12,8 @@ ion-title{
 }
 
 ion-item{
-    --background: var(--ion-color-primary);
-    --color: var(--ion-color-light);
+    --background: #eee;
+    --color: var(--ion-color-dark);
 }
 
 strong{
@@ -34,6 +34,11 @@ strong{
     text-align: center;
 }
 
-h2{
+a{
+    color: black;
+}
+
+.center{
     text-align: center;
+
 }
