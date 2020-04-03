@@ -69,7 +69,7 @@ export class HomePage implements OnInit {
     .subscribe(
       (data)=>{
         this.weather = data;
-        this.days = this.convertTimeToDays(this.weather.daily.data);
+        this.days = this.weatherService.convertTimeToDays(this.weather.daily.data);
         console.log(data);
       },
       (error) => console.log(error)
@@ -79,17 +79,13 @@ export class HomePage implements OnInit {
   getImageUrl(icon:string):string{
     return `../assets/images/${icon}.png`
   }
-  
-  roundNumber(number:number){
-    return Math.round(number)
-  }
 
   getMaxTemperatureOfTheWeek(){
     return this.weather.daily.data.reduce( (maxValue:number, value:any) => {
      if(maxValue < value.temperatureMax){ 
         maxValue = value.temperatureMax
       }
-      return maxValue;
+      return Math.round(maxValue);
     }, 0)
   }
 
@@ -101,28 +97,8 @@ export class HomePage implements OnInit {
       if(minValue > value.temperatureMin){ 
          minValue = value.temperatureMin
        }
-       return minValue;
+       return Math.round(minValue);
      }, {})
-  }
-
-  jsonStringify(tmp:any){
-    return JSON.stringify(tmp)
-  }
-
-  convertTimeToDays(data:any){
-    console.log(data)
-    let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']    
-    return data.map( (element:any, index:number) => {
-      index = index + 1;
-      let date = new Date(element.time * 1000);
-
-      if(index === 1){
-         return 'Today';
-      }
-      else{
-        return days[date.getDay()];
-      }
-    }, 0)
   }
 
   ngOnDestroy(){

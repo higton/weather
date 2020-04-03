@@ -27,18 +27,22 @@ strong{
 .temperature{
     font-size: 90px;
     text-align: center;
-    font-weight: normal;
 }
 
 .hourly_summary{
     text-align: center;
 }
 
-a{
-    color: black;
-}
-
 .center{
     text-align: center;
+}
 
+.container__main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container__temperature{
+    font-size: 1em;
 }

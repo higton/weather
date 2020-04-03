@@ -18,7 +18,8 @@ export class WeatherService {
   }
 
   getWeather(latitude: string, longitude: string){
-    const url = `https://api.darksky.net/forecast/ef24cb03bebdd3e3c5c7813020d6d16d/${latitude},${longitude}?units=si`;
+    
+    const url = `https://api.darksky.net/forecast/ef24cb03bebdd3e3c5c7813020d6d16d/${latitude},${longitude}?extend=hourly&units=si`;
 
     return this.http.jsonp(url, "callback");
   }
@@ -36,5 +37,29 @@ export class WeatherService {
 
   publishEventToHomePage(){
     this.subject$.next(1);
+  }
+
+  jsonStringify(tmp:any){
+    return JSON.stringify(tmp)
+  }
+  
+  roundNumber(number:number){
+    return Math.round(number)
+  }
+
+  convertTimeToDays(data:any){
+    console.log(data)
+    let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']    
+    return data.map( (element:any, index:number) => {
+      index = index + 1;
+      let date = new Date(element.time * 1000);
+
+      if(index === 1){
+         return 'Today';
+      }
+      else{
+        return days[date.getDay()];
+      }
+    }, 0)
   }
 }

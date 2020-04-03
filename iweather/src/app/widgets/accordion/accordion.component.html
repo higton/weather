@@ -8,9 +8,9 @@
     </div>
 
     <div class="container-bar" [ngStyle]="applyStyleMargin()">
-      <span>{{roundNumber(dailyMinTemperature)}}&deg;</span>
+      <span>{{weatherService.roundNumber(dailyMinTemperature)}}&deg;</span>
       <span class="bar" [ngStyle]="applyStyleWidth()"></span>
-      <span>{{roundNumber(dailyMaxTemperature)}}&deg;</span>
+      <span>{{weatherService.roundNumber(dailyMaxTemperature)}}&deg;</span>
     </div>
     <span *ngIf="isMenuOpen">-</span>
     <span *ngIf="!isMenuOpen">+</span>
@@ -18,8 +18,12 @@
 </h2>
 <div [ngClass]="this.isMenuOpen ? 'active' : 'inactive'" id="container">
   <p>{{ description.summary }}</p>
+  <app-information-bar 
+    [description]="weatherService.jsonStringify(description)"
+    [dayNumber]="dayNumber" ></app-information-bar>
+    
   <div class="highLowTemp">
-    <span class="hightTemp">{{roundNumber(dailyMaxTemperature)}}&deg;</span>
+    <span class="hightTemp">{{weatherService.roundNumber(dailyMaxTemperature)}}&deg;</span>
   </div>
   <ion-button 
     type="button" 

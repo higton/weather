@@ -1,4 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { WeatherService } from '../../../services/weather.service'
 
 @Component({
   selector: 'app-accordion',
@@ -8,6 +9,7 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 export class AccordionComponent implements OnInit {
   @Input() description: any;
   @Input() day: number;
+  @Input() dayNumber: number;
   @Input() weeklyMaxTemperature: number;
   @Input() weeklyMinTemperature: number;
   @Input() dailyMaxTemperature: number;
@@ -22,12 +24,10 @@ export class AccordionComponent implements OnInit {
   public percentageTemperatureMin:number;
   public percentageDailyTemperature:number;
 
-  constructor() {}
+  constructor(public weatherService: WeatherService) {}
 
   ngOnInit() {
     this.description = JSON.parse(this.description)
-    console.log(this.description)
-    console.log(this.day)
     
     this.calculateStyleForTemperatureBar()
   }
@@ -63,9 +63,5 @@ export class AccordionComponent implements OnInit {
       'margin-left': `${this.percentageTemperatureMin}%`
     }
     return styles;
-  }
-
-  roundNumber(number:number){
-    return Math.round(number)
   }
 }

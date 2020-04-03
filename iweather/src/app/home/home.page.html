@@ -8,58 +8,54 @@
   <ion-grid *ngIf="weather">
     <ion-row>
       <ion-col wdth-50 offset-25 class="center">
-        <h2>
-        <a *ngIf="searchedResult.address.station">{{searchedResult.address.station}},</a> <a>{{searchedResult.address.city}}, {{searchedResult.address.state}}</a>
-      </h2>
-        <div class="icon">
-          <img src= {{getImageUrl(this.weather.currently.icon)}} >
-        </div>
-        <h4 class="hourly_summary">
-          {{weather.hourly.summary}}
-        </h4>
-        <h1 class="temperature">
-          {{ roundNumber(weather.currently.temperature) }}&deg;
-        </h1>
-        <strong>Apparent Temperature: </strong> {{roundNumber(weather.currently.apparentTemperature)}}&deg;
+        <span *ngIf="searchedResult.address.station">{{searchedResult.address.station}},</span>
+        <span>{{searchedResult.address.city}}, {{searchedResult.address.state}}</span>
 
+        <div class="container__main">
+          <div class="icon">
+            <img src= {{getImageUrl(this.weather.currently.icon)}} >
+          </div>
+          <div class="container__temperature">
+            <span class="temperature">
+              {{ weatherService.roundNumber(weather.currently.temperature) }}&deg;
+            </span>
+            <br>
+            <strong>Feels like: {{weatherService.roundNumber(weather.currently.apparentTemperature)}}&deg; </strong>
+          </div>
+      </div>
       </ion-col>
     </ion-row>
 
     <ion-row>
-      <ion-col width-100>
-        <ion-list>
-
-          <ion-item>
-            <strong>Wind: </strong> {{roundNumber(weather.currently.windSpeed)}} m/s
-          </ion-item>
-
-          <ion-item>
-            <strong>UV index: </strong> {{weather.currently.uvIndex}}
-          </ion-item>
-          <ion-item>
-            <strong>Humidity: </strong> {{weather.currently.humidity}}
-          </ion-item>
-          <ion-item>
-            <strong>Visbilibity: </strong> {{roundNumber(weather.currently.visibility)}}+ km
-          </ion-item>
-
-
-        </ion-list>
+      <ion-col>
+        <div>
+          <span>Next 24 hours</span>
+          <br>
+          <span>{{this.weather.daily.summary}}</span>
+        </div>
+        <br>
+        <div class="container__next24hours">
+          <app-information-bar 
+            [description]="weatherService.jsonStringify(weather)"
+            [dayNumber]=0 >
+          </app-information-bar>
+        </div>
       </ion-col>
     </ion-row>
 
-    <div id="week" class="center">
+    <div id="week">
       <div class="summary">
         <h3>{{this.weather.daily.summary}}</h3>
       </div>
       <div class="day" *ngFor="let day of weather.daily.data; let i = index">
         <app-accordion 
-          day={{days[i]}}
-          image="{{getImageUrl(day.icon)}}"
-          dailyMaxTemperature={{day.temperatureMax}}
-          dailyMinTemperature={{day.temperatureMin}}
-          description={{jsonStringify(day)}}
-          weeklyMaxTemperature={{getMaxTemperatureOfTheWeek()}}
-          weeklyMinTemperature={{getMinTemperatureOfTheWeek()}}></app-accordion>
+          [dayNumber]="i"
+          [day]="days[i]"
+          [image]="getImageUrl(day.icon)"
+          [dailyMaxTemperature]="day.temperatureMax"
+          [dailyMinTemperature]="day.temperatureMin"
+          [description]="weatherService.jsonStringify(weather)"
+          [weeklyMaxTemperature]="getMaxTemperatureOfTheWeek()"
+          [weeklyMinTemperature]="getMinTemperatureOfTheWeek()"></app-accordion>
       </div>
     </div>

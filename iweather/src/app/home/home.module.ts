@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
 import { AccordionComponent } from "../widgets/accordion/accordion.component";
+import { InformationBarComponent } from '../widgets/information-bar/information-bar.component'
 
 @NgModule({
   imports: [
@@ -14,6 +15,6 @@ import { AccordionComponent } from "../widgets/accordion/accordion.component";
     IonicModule,
     HomePageRoutingModule
   ],
-  declarations: [HomePage, AccordionComponent]
+  declarations: [HomePage, AccordionComponent, InformationBarComponent]
 })
 export class HomePageModule {}

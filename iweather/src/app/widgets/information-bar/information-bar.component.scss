@@ -1,0 +1,117 @@
+.container{
+    height: 600px;
+}
+
+.timeline{
+    display: flex;
+    flex-direction: column;
+    width: 10%;
+    height: 100%;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.hourly_informations{
+    height: 100%;
+    width: 100%;
+    margin-left: 5rem;
+    padding: 0 2rem;
+}
+
+.information{
+    width: 100%;
+    height: 8.33%;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--ion-color-light-shade);
+}
+
+.hourly_result{
+    width: 90%;
+    height: 100%;
+    padding: 0 2% 0 5%;
+    white-space: nowrap;
+}
+
+.time24Hours{
+    width: 5%;
+    white-space: nowrap;
+}
+
+.no-border{
+    border: 0;
+}
+.hourly_summaries{
+    font-size: 10px;
+    position: absolute;
+    left: 10%;
+}
+
+.buttons{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.Clear{
+    background-color: #eeeef5;
+}
+
+.flex{
+    display: flex;
+}
+
+.space-between{
+    justify-content: space-between;
+}
+
+.PartlyCloudy{
+    background-color: #d5dae2;
+}
+
+.MostlyCloudy{
+    background-color: #b6bfcb;
+}
+
+.Overcast{
+    background-color: #878f9a;
+}
+
+.LightRain{
+    background-color: #80a5d6;
+}
+
+.PossibleLightRain{
+    background-color: #80a5d6;
+}
+
+.Rain{
+    background-color: #4a80c7;
+}
+
+.PossibleLightRainandHumid{
+    background-color: #4a80c7;
+}
+
+.PossibleDrizzle{
+    background-color: #d5dae2;
+}
+
+.HumidandMostlyCloudy{
+    background-color: #b6bfcb;
+}
+
+.HumidandOvercast{
+    background-color: #878f9a;
+}
+
+.HumidandPartlyCloudy{
+    background-color: #d5dae2;
+}
+
+.RainandHumid{
+    background-color: #4a80c7;
+}
+
+.PossibleDrizzleandHumid{
+    background-color: #d5dae2;
+}
