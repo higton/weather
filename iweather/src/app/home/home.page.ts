@@ -76,6 +76,7 @@ export class HomePage implements OnInit {
     );
   }
 
+  f
   getImageUrl(icon:string):string{
     return `../assets/images/${icon}.png`
   }

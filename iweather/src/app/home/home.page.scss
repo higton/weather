@@ -1,10 +1,31 @@
-/* .home{
-    --background: var(--ion-color-secondary);
-    margin-top: 30px;
-} */
+.container_next24Hours{
+    height: 100vh;
+}
+
+ion-header{
+    height: 6vh;
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 1rem;
+}
+
+ion-icon{
+    height: 40px;
+    width: 40px;
+}
+
+.container_searchedResult{
+    margin-left: 20px;
+}
+/* ion-toolbar{
+    display: block;
+    height: 5vh;
+    align-items: stretch;
+
+}
 ion-toolbar{
     --background: var(--ion-color-primary);
-}
+} */
 
 ion-title{
     --color: var(--ion-color-light);
@@ -22,8 +43,13 @@ strong{
 
 .icon{
     text-align: center;
+    height: 100%;
 }
 
+img{
+    height: 100%;
+    width: auto;
+}
 .temperature{
     font-size: 90px;
     text-align: center;
@@ -41,8 +67,14 @@ strong{
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 60%;
 }
 
 .container__temperature{
     font-size: 1em;
+}
+
+.title{
+    font-size: 1.5em;
+    font-weight: bold;
 }

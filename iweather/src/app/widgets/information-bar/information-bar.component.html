@@ -1,37 +1,47 @@
 
-      <div class="container flex space-between">
-          <div class="timeline">
-            <span [ngClass]="removeWhiteSpaces(data)" [ngStyle]="{'height': hourlyWidths[i]+'%' }" *ngFor="let data of hourlySummaries; let i = index">
-              <span class="hourly_summaries">{{hourlySummaries[i]}}</span>
-            </span>
-          </div>
+<div class="container flex space-between">
+    <div class="timeline">
+      <span [ngClass]="removeWhiteSpaces(data)" [ngStyle]="{'height': hourlyWidths[i]+'%' }" *ngFor="let data of hourlySummariesFiltered; let i = index">
+        <span class="hourly_summaries">{{hourlySummariesFiltered[i]}}</span>
+      </span>
+    </div>
 
-          <div class="hourly_informations">
-            <div class="information">
-              <span class="time24Hours">{{time24Hours[0]}}</span>
-              <div class="hourly_result" *ngIf="resultRelativeWidths">
-                <span [ngStyle]="{'margin-left': resultRelativeWidths[0]+'%' }">{{resultRelative[0]}}</span>
-              </div>
-            </div>
-            <div class="information" *ngFor="let hour of arrayOne(11); let i = index" >
-              <span class="time24Hours">{{time24Hours[i*2 + 2]}}</span>
-              <div class="hourly_result" *ngIf="resultRelativeWidths">
-                <span [ngStyle]="{'margin-left': resultRelativeWidths[i+1]+'%' }">{{resultRelative[i+1]}}</span>
-              </div>
-            </div>
+    <div class="hourly_informations">
+      <div class="information">
+          <span class="time24Hours">
+            <span>{{time24HoursWith_AM_PM[0]}}</span>
+            <span>{{time24HoursWith_AM_PM[1]}}</span>
+          </span>
+
+          <div class="hourly_result" *ngIf="resultRelativeWidths">
+              <span class="number" [ngStyle]="{'margin-left': resultRelativeWidths[0]+'%' }">{{resultRelative[0]}}</span>
           </div>
       </div>
-      <div class="buttons">
-        <div class="button_temperature">
-          <ion-button (click)="onClickTemperature()">TEMPERATURE (˚C)</ion-button>
-        </div>
-        <div class="button_uv">
-          <ion-button (click)="onClickUvIndex()">UV INDEX</ion-button>
-        </div>
-        <div class="button_apparentTemperature">
-          <ion-button (click)="onClickApparentTemperature()">FEELS-LIKE (˚C)</ion-button>
-        </div>
-        <div class="button_PrecipIntensity">
-          <ion-button (click)="onClickPrecipIntensity()">PRECIP (%)</ion-button>
+      <div class="information" *ngFor="let hour of arrayOne(11); let i = index" >
+        <span class="time24Hours">
+          <span>{{time24HoursWith_AM_PM[i*2 + 2]}}</span>
+          <span>{{time24HoursWith_AM_PM[i*2 + 3]}}</span>
+        </span>
+        <div class="hourly_result" *ngIf="resultRelativeWidths">
+          <span class="number" [ngStyle]="{'margin-left': resultRelativeWidths[i+1]+'%' }">{{resultRelative[i+1]}}</span>
         </div>
       </div>
+    </div>
+</div>
+<br>
+<br>
+<div class="buttons">
+  <div class="button_temperature">
+    <ion-button (click)="onClickTemperature()">TEMPERATURE (˚C)</ion-button>
+  </div>
+  <div class="button_uv">
+    <ion-button (click)="onClickUvIndex()">UV INDEX</ion-button>
+  </div>
+  <div class="button_apparentTemperature">
+    <ion-button (click)="onClickApparentTemperature()">FEELS-LIKE (˚C)</ion-button>
+  </div>
+  <div class="button_PrecipIntensity">
+    <ion-button (click)="onClickPrecipIntensity()">PRECIP (%)</ion-button>
+  </div>
+</div>
+<br>

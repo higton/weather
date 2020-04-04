@@ -1,15 +1,17 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>home</ion-title>
-  </ion-toolbar>
+  <div class="container_icon">
+    <ion-icon name="search-circle-outline"></ion-icon>
+  </div>
+  <div class="container_searchedResult">
+    {{searchedResult.address.city}}, {{searchedResult.address.state}}
+  </div>
 </ion-header>
 
 <ion-content class="home">
   <ion-grid *ngIf="weather">
     <ion-row>
-      <ion-col wdth-50 offset-25 class="center">
+      <ion-col wdth-50 offset-25 hght-50 class="center">
         <span *ngIf="searchedResult.address.station">{{searchedResult.address.station}},</span>
-        <span>{{searchedResult.address.city}}, {{searchedResult.address.state}}</span>
 
         <div class="container__main">
           <div class="icon">
@@ -26,12 +28,16 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
+    <ion-row >
       <ion-col>
         <div>
-          <span>Next 24 hours</span>
+          <span class="title">Next 24 hours</span>
           <br>
-          <span>{{this.weather.daily.summary}}</span>
+          <span>
+            High: {{ weatherService.roundNumber(this.weather.daily.data[0].temperatureMax)}}°C Low: {{weatherService.roundNumber(this.weather.daily.data[0].temperatureMin)}}°C. {{this.weather.hourly.summary}}
+          </span>
+          <br>
+          <br>
         </div>
         <br>
         <div class="container__next24hours">
@@ -42,11 +48,14 @@
         </div>
       </ion-col>
     </ion-row>
-
+    <br>
+    <br>
     <div id="week">
-      <div class="summary">
-        <h3>{{this.weather.daily.summary}}</h3>
-      </div>
+      <span class="title">Next 7 Days</span>
+      <br>
+      <span>{{this.weather.daily.summary}}</span>
+      <br>
+      <br>
       <div class="day" *ngFor="let day of weather.daily.data; let i = index">
         <app-accordion 
           [dayNumber]="i"
@@ -59,3 +68,5 @@
           [weeklyMinTemperature]="getMinTemperatureOfTheWeek()"></app-accordion>
       </div>
     </div>
+    <br>
+    <br>

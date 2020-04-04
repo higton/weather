@@ -1,11 +1,12 @@
 .container{
-    height: 600px;
+    height:60vh;
 }
 
 .timeline{
     display: flex;
     flex-direction: column;
     width: 10%;
+    max-width: 90px;
     height: 100%;
     border-radius: 5px;
     overflow: hidden;
@@ -14,37 +15,64 @@
 .hourly_informations{
     height: 100%;
     width: 100%;
-    margin-left: 5rem;
-    padding: 0 2rem;
+    margin-left: 1rem;
+    white-space: nowrap;
 }
 
 .information{
     width: 100%;
     height: 8.33%;
     display: flex;
-    align-items: center;
     border-bottom: 1px solid var(--ion-color-light-shade);
 }
 
 .hourly_result{
+    
     width: 90%;
     height: 100%;
-    padding: 0 2% 0 5%;
+    padding: 0 30px 0 0;
+    margin-left: 122px;
+    display: flex;
+    align-items: center;
+}
+
+.number{
     white-space: nowrap;
+    min-width: 30px;
+    min-height: 30px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1d1a20;
+    color: white;
+    border-radius: 50%;
 }
 
 .time24Hours{
-    width: 5%;
-    white-space: nowrap;
+    display: flex;
+    min-width: 42px;
+    font-size: 12px;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.time24Hours span{
+    border: 1px solid var(--ion-color-light-shade);
 }
 
 .no-border{
     border: 0;
 }
+
 .hourly_summaries{
     font-size: 10px;
+    color: black;
+    max-width: 80px;
+    height: 20px;
     position: absolute;
-    left: 10%;
+    margin-top: 4px;
+    margin-left: calc( ( 90px + 1rem + 42px) + 0.5rem)
 }
 
 .buttons{
@@ -52,8 +80,21 @@
     justify-content: space-evenly;
 }
 
+@media(max-width: 600px){
+    .buttons{
+        overflow: scroll;
+    }
+    .hourly_summaries{
+        margin-left: calc( ( 10% + 1rem + 42px) + 0.5rem)
+    }
+}
+
 .Clear{
     background-color: #eeeef5;
+}
+
+.test{
+    align-self: flex-end;
 }
 
 .flex{
@@ -80,38 +121,14 @@
     background-color: #80a5d6;
 }
 
-.PossibleLightRain{
-    background-color: #80a5d6;
-}
-
 .Rain{
     background-color: #4a80c7;
 }
 
-.PossibleLightRainandHumid{
-    background-color: #4a80c7;
+.Drizzle{
+    background-color: #aac9f2;
 }
 
-.PossibleDrizzle{
-    background-color: #d5dae2;
-}
-
-.HumidandMostlyCloudy{
-    background-color: #b6bfcb;
-}
-
-.HumidandOvercast{
-    background-color: #878f9a;
-}
-
-.HumidandPartlyCloudy{
-    background-color: #d5dae2;
-}
-
-.RainandHumid{
-    background-color: #4a80c7;
-}
-
-.PossibleDrizzleandHumid{
-    background-color: #d5dae2;
+.Humid{
+    background-color: #aac9f2;
 }

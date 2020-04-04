@@ -19,10 +19,12 @@ export class InformationBarComponent implements OnInit {
   hourlyWidths:number[]
   time24Hours:any
   currentTime:number
+  hourlySummariesFiltered:any
   hourlySummariesRepeated:any
   resultRelative:any
   resultRelativeWidths:any
   propriety:any
+  time24HoursWith_AM_PM:any
 
   constructor() { }
 
@@ -34,63 +36,111 @@ export class InformationBarComponent implements OnInit {
     this.currentTime = this.getTimeInHour(this.description.hourly.data[0].time)
     let dataSliced = this.getSlicedData(this.dayNumber, this.description.hourly.data, this.currentTime )
     this.hourlySummaries =  this.getHourlySummaries( dataSliced )
-    this.hourlySummariesRepeated = this.getHourlySummariesRepeated( dataSliced ) 
-    this.hourlyWidths = this.transformInWidthsFormat( this.hourlySummariesRepeated)
-    this.time24Hours= this.getTime24Hours(dataSliced)
+    this.hourlySummaries =  this.shortenHourlySummaries( this.hourlySummaries )
 
+    this.hourlySummariesFiltered = this.filterHourlySummaries( this.hourlySummaries )
+    dataSliced = this.shortenHourlySummaries( dataSliced )
+    this.hourlySummariesRepeated = this.getNumberOfTimesHourlySummariesRepeated( this.hourlySummaries ) 
+    this.hourlyWidths = this.transform24HoursInWidthsFormat( this.hourlySummariesRepeated)
+    this.time24Hours = this.getTime24Hours(dataSliced)
+    this.time24HoursWith_AM_PM = this.concat24HoursWith_AM_PM(dataSliced) 
     if(this.dayNumber < 7){
-      this.onClickUvIndex()
+      this.onClickTemperature()
     }
   }
 
-
-  getHourlyWidth(max, min, value){
-    return Math.round( ( (value - min) / (max - min) ) * 100 )
+  getTimeInHour(data){
+    let time = new Date(data * 1000);
+    return time.getHours()
   }
 
-  getMinimumValue(day, propriety){
-    if(propriety === 'uv'){
-      return 0
-    }
-    if(propriety === 'apparentTemperature'){
-      return this.description.daily.data[day].apparentTemperatureMin
-    }
-    if(propriety === 'temperature'){
-      return this.description.daily.data[day].temperatureMin
-    }
-    if(propriety === 'precipIntensity'){
-      return 0
-    }
+  getSlicedData(dayNumber:number, array, currentTime){
+    let start = this.getStartHour(dayNumber, currentTime)
+    let end = this.getEndHour(start)
+    return array.slice(start, end)
   }
 
-  getMaximumValue(day, propriety){
-    if(propriety === 'uv'){
-      return 12
+  getStartHour(dayNumber:number, currentTime){
+    let start = 0
+
+    if(0 !== dayNumber){
+      start = ((dayNumber - 1)* 24) + (24 - currentTime);
     }
-    if(propriety === 'apparentTemperature'){
-      return this.description.daily.data[day].apparentTemperatureMax
+    else{
+      start = 0
     }
-    if(propriety === 'temperature'){
-      return this.description.hourly.data[day].temperatureMax
-    }
-    if(propriety === 'precipIntensity'){
-      return this.description.hourly.data[day].precipIntensityMax
-    }
+    return start
   }
 
-  getValue(hour, propriety){
-    if(propriety === 'uv'){
-      return this.description.hourly.data[hour].uvIndex
-    }
-    if(propriety === 'apparentTemperature'){
-      return Math.round( this.description.hourly.data[hour].apparentTemperature )
-    }
-    if(propriety === 'temperature'){
-      return Math.round( this.description.hourly.data[hour].temperature )
-    }
-    if(propriety === 'precipIntensity'){
-      return this.description.hourly.data[hour].precipIntensity
-    }
+  getEndHour(start){
+    return start + 24;
+  }
+
+  getHourlySummaries(array:any){
+    return array.map( value => value.summary)
+  }
+
+  filterHourlySummaries(array){
+    return array.filter((element:any, index:number, array:any) => {
+      if(index + 1=== array.length){
+        return true
+      }
+      else if(index + 1 < array.length){
+        return array[index + 1] != array[index]
+      }
+  })
+  }
+
+  shortenHourlySummaries(array:any){
+    return array.map(value =>{
+      if(value === 'Possible Light Rain and Humid'){
+        return 'Light Rain'
+      }
+      else if(value === 'Humid and Mostly Cloudy'){
+        return 'Mostly Cloudy'
+      }
+      else if(value === 'Possible Light Rain'){
+        return 'Light Rain'
+      }
+      else if(value === 'Possible Drizzle'){
+        return 'Drizzle'
+      }
+      else if(value === 'Humid and Partly Cloudy'){
+        return 'Partly Cloudy'
+      }
+      else if(value === 'Rain and Humid'){
+        return 'Rain'
+      }
+      else if(value === 'Possible Drizzle and Humid'){
+        return 'Drizzle'
+      }
+      else if(value === 'Humid and Overcast'){
+        return 'Overcast'
+      }
+      else return value
+    })
+  }
+
+  getNumberOfTimesHourlySummariesRepeated(array:any){
+    let resultIndex = 0;
+
+    return array.reduce((accumulator:number[], currentValue:any, index:number, array:any) =>{
+      if(array.length === index + 1){}
+      else if(array[index + 1] !== array[index]){
+        resultIndex += 1;
+        accumulator[resultIndex] = 1;
+      }
+      else{
+        accumulator[resultIndex] += 1;
+      }
+      return accumulator;
+    }, [1])
+  }
+
+  transform24HoursInWidthsFormat(arr){
+    return arr.map(value => { 
+      return Math.round(value/24 * 100);
+    })
   }
 
   getTime24Hours(data){
@@ -105,22 +155,43 @@ export class InformationBarComponent implements OnInit {
     })
   }
 
-  concat24HoursWith_AM_PM(data){
-    return data.filter( (value, index) => index<24).reduce( (accumulator, value, index, array) => {
-      array[index] =  this.getTimeInHour(array[index])
+  getHourlyWidth(max, min, value){
+/*     console.log(min)
+    console.log(max)
+    console.log(value) */
+    return Math.round( ( (value - min) / (max - min) ) * 100 )
+  }
 
-      if(array[index] > 12){
-        array[index] -= 12;
-        let tmp = array[index].toString()
-        array[index] = tmp.concat(' ', 'PM');
+  getValue(hour, propriety){
+    if(propriety === 'uv'){
+      return this.description.hourly.data[hour].uvIndex
+    }
+    if(propriety === 'apparentTemperature'){
+      return Math.round(this.description.hourly.data[hour].apparentTemperature)
+    }
+    if(propriety === 'temperature'){
+      return Math.round(this.description.hourly.data[hour].temperature)
+    }
+    if(propriety === 'precipProbability'){
+      return +( (this.description.hourly.data[hour].precipProbability).toFixed(2) );
+    }
+  }
+
+  concat24HoursWith_AM_PM(data){
+    console.log(data)
+    return data.map( (value, index, array) => {
+      value = this.getTimeInHour(value.time)
+
+      if(value > 12){
+        value -= 12;
+        let tmp = value.toString()
+        return tmp.concat(' ', 'PM');
       }
       else{
-        let tmp = array[index].toString()
-        array[index] = tmp.concat(' ', 'AM');
+        let tmp = value.toString()
+        return tmp.concat(' ', 'AM');
       }
-
-      return array
-    }, 0)
+    } )
   }
 
   transform24HoursIn12Hours(data){
@@ -130,68 +201,8 @@ export class InformationBarComponent implements OnInit {
     });
   }
 
-  getSlicedData(dayNumber:number, array, currentTime){
-    let start = this.getStart(dayNumber, currentTime)
-    let end = this.getEndValue(start)
-    return array.slice(start, end)
-  }
-
-  getStart(dayNumber:number, currentTime){
-    let start = 0
-
-    if(0 !== dayNumber){
-      start = ((dayNumber - 1)* 24) + (24 - currentTime);
-    }
-    else{
-      start = 0
-    }
-    return start
-  }
-
-  getEndValue(start){
-    return start + 24;
-  }
-
-  getHourlySummaries(array:any){
-    return array.filter((element:any, index:number, array:any) => {
-      if(index + 1=== array.length){
-        return true
-      }
-      else if(index + 1 < array.length){
-        return array[index + 1].summary != array[index].summary
-      }
-  }).map( value => value.summary)
-
-  }
-  getHourlySummariesRepeated(array:any){
-    let resultIndex = 0;
-
-    return array.reduce((accumulator:number[], currentValue:any, index:number, array:any) =>{
-      if(array.length === index + 1){}
-      else if(array[index + 1].summary !== array[index].summary){
-        resultIndex += 1;
-        accumulator[resultIndex] = 1;
-      }
-      else{
-        accumulator[resultIndex] += 1;
-      }
-      return accumulator;
-    }, [1])
-  }
-
-  transformInWidthsFormat(arr){
-    return arr.map(value => { 
-      return Math.round(value/24 * 100);
-    })
-  }
-
   removeWhiteSpaces(arr){
     return arr.replace(/\s+/g, '')
-  }
-
-  getTimeInHour(data){
-      let time = new Date(data * 1000);
-      return time.getHours()
   }
 
   arrayOne(n:number){
@@ -215,7 +226,7 @@ export class InformationBarComponent implements OnInit {
   }
 
   onClickPrecipIntensity(){
-    this.propriety = 'precipIntensity'
+    this.propriety = 'precipProbability'
     this.refreshValues()
   }
 
@@ -223,25 +234,27 @@ export class InformationBarComponent implements OnInit {
     let time12Hours = this.transform24HoursIn12Hours(this.time24Hours)
     this.resultRelative = this.getResultRelative(this.propriety, time12Hours, this.dayNumber, this.currentTime)
     this.resultRelativeWidths = this.getResultRelativeWitdh(this.resultRelative, this.dayNumber, this.propriety)
+    console.log('resultRelativeWitdh: ')
+    console.log(this.resultRelativeWidths)
   }
 
   getResultRelative(propriety, time, dayNumber, currentTime){
-    console.log(propriety)
+/*     console.log(propriety)
     console.log(time)
     console.log(dayNumber)
     console.log(currentTime)
-
-    let start = this.getStart(dayNumber, currentTime)
+ */
+    let start = this.getStartHour(dayNumber, currentTime)
 
     console.log('start: ' + start)
     let result = time.map((value, index) => {
       // console.log(this.getValue(value ,'uv'))
-      console.log('start + index*2: ' + (start+index*2))
-      value = this.getValue( start + 1 + (index*2), propriety)
-      console.log('value after: ' + value)
+      // console.log('start + index*2: ' + (start+index*2))
+      value = this.getValue( start + (index*2), propriety)
+      // console.log('value after: ' + value)
       return value
     })
-    console.log(result)
+    // console.log(result)
 
     this.resultRelative = result
 
@@ -252,11 +265,29 @@ export class InformationBarComponent implements OnInit {
   }
 
   getResultRelativeWitdh(result, dayNumber, propriety){
-    let min = this.getMinimumValue(dayNumber, propriety)
-    let max = this.getMaximumValue(dayNumber, propriety)
+    let min = this.getMinimumValue(result)
+    let max = this.getMaximumValue(result)
 
     return result.map((value) => {
       return this.getHourlyWidth(max, min, value)
     })
+  }
+
+  getMinimumValue(arr){
+    return arr.reduce((accumulator, value) => {
+      if(accumulator > value){
+        accumulator = value;
+      }
+      return accumulator
+    },)
+  }
+
+  getMaximumValue(arr){
+    return arr.reduce((accumulator, value) => {
+      if(accumulator < value){
+        accumulator = value;
+      }
+      return accumulator
+    }, 0)
   }
 }
